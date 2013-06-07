@@ -1,0 +1,11 @@
+NVM :
+
+curl https://raw.github.com/creationix/nvm/master/install.sh | sh
+
+NodeJS
+
+nvm install v0.10.10
+node --version
+nvm ls
+nvm alias default v0.10.10
+nvm use default

@@ -1,0 +1,45 @@
+<html>
+<head>
+<script src="https://raw.github.com/janl/mustache.js/master/mustache.js"></script>
+<title>Chat</title>
+<script type="text/template" id="chat-template">
+   <div>
+   	<label>{{name}}</label>
+	<span>{{message}}</span>
+   </div>
+</script>
+<script src="/socket.io/socket.io.js"></script>
+<script src="http://code.jquery.com/jquery-2.0.0.js"></script>
+<script>
+
+	var socket = io.connect('http://anujarora.me:8080');
+    	socket.on('connect', function () {
+			$("button.submit").show();
+			socket.emit("subscribe", {room: "room"});
+			socket.on("past messages", function(data){
+				$('button.submit').click(function(event){
+				socket.emit("new message", {name: $(".name").val(), message: $(".message").val()});
+
+			});
+		});
+		
+		socket.on("new message", function(data){
+			var html = Mustache.to_html($('#chat-template').html(), data);
+			        
+			$("div.chat").append(html);
+		});
+    });
+
+</script>
+</head>
+
+<body>
+	
+<div class="chat"></div>	
+
+<input type="text" name="name" class="name" placeholder="Enter your name" />
+<textarea name="message" class="message">Enter your message</textarea>
+<button class="submit" value="Submit" style="display:none;"/>
+
+</body>
+</html>
